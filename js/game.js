@@ -7,18 +7,32 @@ class Game {
 
     this.board;
     this.player;
+    this.keys = {
+      UP: 38,
+      DOWN: 40,
+      RIGHT: 39,
+      LEFT: 37
+    };
   }
 
-  init() {}
+  init() {
+    this.player = new Player(
+      this.ctx,
+      this.width,
+      this.height,
+      "/res/img/spaces_ships_player/Spaceship_05.svg",
+      this.keys
+    );
+  }
 
   reset() {}
 
   clearAll() {
-    //console.log("Limpia el juego");
+    this.ctx.clearRect(0, 0, this.width, this.height);
   }
 
   drawAll() {
-    //console.log("Pinta el juego");
+    this.player.draw();
   }
 
   moveAll() {
