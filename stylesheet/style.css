@@ -28,6 +28,7 @@ body {
   background-color: #000;
   height: 100%;
   font-family: "space-age";
+  padding: 0 5%;
 }
 
 /* Space */
@@ -57,6 +58,18 @@ h1 {
 .stroke {
   -webkit-text-fill-color: rgba(0, 0, 0, 0.5);
   -webkit-text-stroke: 0.5px yellow;
+}
+
+.game {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.info-wrapper {
+  background: blue;
+  height: 75vh;
+  width: 10vw;
 }
 
 .canvas-wrapper {
