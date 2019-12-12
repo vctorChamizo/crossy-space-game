@@ -14,6 +14,13 @@ class Game {
       RIGHT: 39,
       LEFT: 37
     };
+
+    this.time = 100;
+    this.progressBar;
+
+    this.counterStar = 0;
+    this.starElement;
+    this.imageStar;
   }
 
   init() {
@@ -32,6 +39,8 @@ class Game {
       "/res/img/star.svg"
     );
 
+    this.progressBar = document.getElementById("progress-bar");
+    this.imageStar = "/res/img/star.svg";
     //document.getElementById("score");
   }
 
@@ -59,5 +68,27 @@ class Game {
     );
   }
 
-  gameOver() {}
+  winStar() {
+    document
+      .getElementById("star-" + this.counterStar)
+      .setAttribute("src", this.imageStar);
+
+    this.counterStar++;
+
+    if (this.counterStar >= 3) this.gameWin();
+  }
+
+  updateTime() {
+    this.time -= 3.3;
+    this.progressBar.style.height = this.time + "%";
+    if (this.time <= 0) this.gameOver();
+  }
+
+  gameWin() {
+    console.log("YOU ARE WIN");
+  }
+
+  gameOver() {
+    console.log("GAME OVER");
+  }
 }
