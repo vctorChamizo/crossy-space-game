@@ -20,11 +20,32 @@
     <div class="space"></div>
     <h1 class="stroke">Crossy {</h1>
     <div class="game">
-      <div id="live-item" class="info-wrapper"></div>
+      <div class="info-wrapper">
+        <div>
+          <h2 class="stroke title-items">LIVES</h2>
+          <p id="lives-player" class="stroke title-items">3</p>
+        </div>
+        <div>
+          <h2 class="stroke title-items">TIME</h2>
+          <div class="progress">
+            <div class="progress-bar"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="canvas-wrapper">
         <canvas id="game-board" width="1000px" height="500px"></canvas>
       </div>
-      <div id="goal-item" class="info-wrapper"></div>
+
+      <div class="info-wrapper">
+          <h2 class="stroke title-items">GOALS</h2>
+        <div class="goal-wrapper">
+          <img class="star-wrapper" src="/res/img/star-empty.svg" alt="" />
+          <img class="star-wrapper" src="/res/img/star-empty.svg" alt="" />
+          <img class="star-wrapper" src="/res/img/star-empty.svg" alt="" />  
+        </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
