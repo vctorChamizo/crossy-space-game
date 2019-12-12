@@ -80,7 +80,9 @@ class Game {
 
   updateTime() {
     this.time -= 3.3;
+
     this.progressBar.style.height = this.time + "%";
+
     if (this.time <= 0) this.gameOver();
   }
 
