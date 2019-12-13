@@ -1,7 +1,5 @@
 window.onload = () => {
   let game = new Game();
-  game.init();
-
   let framesCounter = 0;
 
   function step(timestap) {
@@ -20,5 +18,9 @@ window.onload = () => {
 
     window.requestAnimationFrame(step);
   }
-  window.requestAnimationFrame(step);
+
+  document.getElementById("continue-btn").onclick = () => {
+    game.start();
+    window.requestAnimationFrame(step);
+  };
 };
