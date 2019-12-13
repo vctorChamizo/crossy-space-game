@@ -16,6 +16,8 @@ window.onload = () => {
 
     if (game.collisionStar()) game.winStar();
 
+    game.gameStatus();
+
     window.requestAnimationFrame(step);
   }
 

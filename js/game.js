@@ -136,8 +136,10 @@ class Game {
 
   gameStatus() {
     this.status === this.statusKey.WINNER
-      ? this.plyerWinner()
-      : this.playerGameOver();
+      ? this.playerWinner()
+      : this.status === this.statusKey.WINNER
+      ? this.playerGameOver()
+      : null;
   }
 
   playerWinner() {

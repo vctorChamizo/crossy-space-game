@@ -17,19 +17,19 @@
     <script type="text/javascript" src="/js/index.js"></script>
   </head>
   <body>
-    <!-- Background -->
-    <!-- <div class="space"></div> -->
-
     <!-- Title -->
     <h1 class="stroke">Crossy {</h1>
+
+    <!-- Background -->
+    <div class="space"></div>
 
     <!-- Game Container -->
     <div class="game">
       <!-- Progress Bar and Lives Counter Container -->
       <div id="info-player-container" class="info-wrapper">
-        <div class="stroke title-items">
-          <h2>LIVES</h2>
-          <p id="lives-player">3</p>
+        <div class="stroke">
+          <h2 class="title-items">LIVES</h2>
+          <p class="title-items" id="lives-player">3</p>
         </div>
 
         <div>
@@ -48,12 +48,12 @@
           <!-- Select space ship -->
           <button id="continue-btn">Start Game</button>
         </div>
-        <canvas id="game-board" width="1000px" height="500px"></canvas>
+        <canvas id="game-board" width="980px" height="500px"></canvas>
       </div>
 
       <!-- Goals Container -->
       <div id="info-goals-container" class="info-wrapper">
-        <h2 class="stroke title-items">GOALS</h2>
+        <h2 class="stroke title-items">SCORE</h2>
 
         <div class="goal-wrapper">
           <img
