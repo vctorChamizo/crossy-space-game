@@ -21,6 +21,9 @@ class Game {
     this.counterStar = 0;
     this.starElement;
     this.imageStar;
+
+    this.counterLives = 3;
+    this.livesElement;
   }
 
   init() {
@@ -40,6 +43,7 @@ class Game {
     );
 
     this.progressBar = document.getElementById("progress-bar");
+    this.livesElement = document.getElementById("lives-player");
     this.imageStar = "/res/img/star.svg";
     //document.getElementById("score");
   }
@@ -79,11 +83,16 @@ class Game {
   }
 
   updateTime() {
-    this.time -= 3.3;
+    this.time -= 20.3;
 
     this.progressBar.style.height = this.time + "%";
 
-    if (this.time <= 0) this.gameOver();
+    if (this.time <= 0) {
+      this.counterLives--;
+      this.livesElement.textContent--;
+
+      if (this.counterLives === 0) this.gameOver();
+    }
   }
 
   gameWin() {
