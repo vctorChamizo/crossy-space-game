@@ -1,4 +1,4 @@
-class Goal {
+class Mission {
   constructor(ctx, gameWidth, gameHeight, image) {
     this.ctx = ctx;
 

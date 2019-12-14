@@ -11,14 +11,14 @@
     <link rel="stylesheet" href="/stylesheet/style.css" />
 
     <script type="text/javascript" src="/js/obstacle.js"></script>
-    <script type="text/javascript" src="/js/goal.js"></script>
+    <script type="text/javascript" src="/js/mission.js"></script>
     <script type="text/javascript" src="/js/board.js"></script>
     <script type="text/javascript" src="/js/player.js"></script>
     <script type="text/javascript" src="/js/game.js"></script>
     <script type="text/javascript" src="/js/index.js"></script>
   </head>
   <body>
-    <!-- Title -->
+    <!-- Main Title -->
     <h1 class="stroke">Crossy {</h1>
 
     <!-- Background -->
@@ -41,40 +41,29 @@
         </div>
       </div>
 
-      <!-- Option Board and Game Borad Container -->
+      <!-- Option Board and Game Board Container -->
       <div class="board-wrapper">
         <div id="option-board">
-          <h2 class="level-title stroke">LEVEL 1</h2>
-          <div></div>
-          <!-- Select space ship -->
+          <h2 id="main-title-option-board" class="stroke">
+            LEVEL 1
+          </h2>
+          <h2 id="status-title-option-board" class="stroke"></h2>
+          <p id="text-option-board" class="stroke">
+            ¿Do you want to try again?
+          </p>
           <button id="continue-btn">Start Game</button>
         </div>
         <canvas id="game-board" width="980px" height="500px"></canvas>
       </div>
 
-      <!-- Goals Container -->
-      <div id="info-goals-container" class="info-wrapper">
+      <!-- Mission Container -->
+      <div id="info-mission-container" class="info-wrapper">
         <h2 class="stroke title-items">SCORE</h2>
 
-        <div class="goal-wrapper">
-          <img
-            id="star-0"
-            class="star-wrapper"
-            src="/res/img/star-empty.svg"
-            alt=""
-          />
-          <img
-            id="star-1"
-            class="star-wrapper"
-            src="/res/img/star-empty.svg"
-            alt=""
-          />
-          <img
-            id="star-2"
-            class="star-wrapper"
-            src="/res/img/star-empty.svg"
-            alt=""
-          />
+        <div class="mission-wrapper">
+          <img id="star-0" class="mission" />
+          <img id="star-1" class="mission" />
+          <img id="star-2" class="mission" />
         </div>
       </div>
     </div>

@@ -8,6 +8,9 @@ class Player {
     this.image = new Image();
     this.image.src = image;
 
+    this.imageDeath = new Image();
+    this.imageDeath.src = "/res/img/death.svg";
+
     this.keys = keys;
 
     this.width = 80;
@@ -30,6 +33,16 @@ class Player {
   draw() {
     this.ctx.drawImage(
       this.image,
+      this.posX,
+      this.posY,
+      this.width,
+      this.height
+    );
+  }
+
+  drawDeath() {
+    this.ctx.drawImage(
+      this.imageDeath,
       this.posX,
       this.posY,
       this.width,

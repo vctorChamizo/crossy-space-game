@@ -1,11 +1,18 @@
 class Game {
   constructor() {
-    this.optionMenu;
+    /* Global Context */
     this.canvas;
     this.ctx;
     this.width;
     this.height;
 
+    /* Option Menu */
+    this.optionMenu;
+    this.mainTitleOption;
+    this.statusTitleOption;
+    this.textQuestionOption;
+
+    /* Player */
     this.player;
     this.keys = {
       UP: 38,
@@ -14,23 +21,24 @@ class Game {
       LEFT: 37
     };
 
-    this.goal;
+    /* Mission */
+    this.mission;
+    this.missionContainer;
+    this.missionImage;
+    this.counterMission;
+    this.missionImageEmpty;
 
     this.infoPlayerElement;
     this.livesElement;
     this.progressBarElement;
-    this.time = 100;
-    this.counterLives = 3;
-
-    this.infoGoalsElement;
-    this.imageStar;
-    this.counterStar = 0;
+    this.time;
+    this.counterLives;
 
     this.obstacle;
-    this.obstacles = [];
+    this.obstacles;
     this.typeObstacle = {};
 
-    this.status = undefined;
+    this.status;
     this.statusKey = {
       WINNER: "Winner",
       LOSER: "Loser"
@@ -50,15 +58,42 @@ class Game {
     this.infoPlayerElement = document.getElementById("info-player-container");
     this.infoPlayerElement.style.visibility = "visible";
 
-    this.infoGoalsElement = document.getElementById("info-goals-container");
-    this.infoGoalsElement.style.visibility = "visible";
-
-    this.setPlayerOnBoard();
+    this.missionContainer = document.getElementById("info-goals-container");
+    this.missionContainer.style.visibility = "visible";
+    this.starElement = this.setPlayerOnBoard();
     this.setGoalOnBoard();
 
     this.livesElement = document.getElementById("lives-player");
     this.progressBarElement = document.getElementById("progress-bar");
-    this.imageStar = "/res/img/star.svg";
+    this.missionImage = "/res/img/star.svg";
+    this.missionImageEmpty = "/res/img/star-empty.svg";
+
+    this.mainTitleOption = document.getElementById("main-title-option-board");
+    this.statusTitleOption = document.getElementById(
+      "status-title-option-board"
+    );
+    this.textQuestionOption = document.getElementById("text-option-board");
+
+    this.init();
+  }
+
+  init() {
+    this.time = 100;
+    this.counterLives = 3;
+    this.counterMission = 0;
+    this.status = undefined;
+    this.obstacles = [];
+
+    this.initStars();
+  }
+
+  initStars() {
+    let starElement;
+
+    for (let i = 0; i < 3; ++i) {
+      starElement = document.getElementById("star-" + i);
+      if (starElement) starElement.setAttribute("src", this.missionImageEmpty);
+    }
   }
 
   setPlayerOnBoard() {
@@ -72,7 +107,7 @@ class Game {
   }
 
   setGoalOnBoard() {
-    this.goal = new Goal(
+    this.mission = new Mission(
       this.ctx,
       this.width,
       this.height,
@@ -80,7 +115,7 @@ class Game {
     );
   }
 
-  reset() {
+  restart() {
     this.time = 100;
     this.progressBarElement.style.height = this.time + "%";
 
@@ -93,7 +128,7 @@ class Game {
   }
 
   update() {
-    this.goal.draw();
+    this.mission.draw();
     this.obstacles.forEach(obstacle => obstacle.draw());
 
     this.ctx.save();
@@ -108,14 +143,14 @@ class Game {
     this.obstacles.push(new Obstacle(this.ctx, this.width, this.height));
   }
 
-  isCollision() {
-    /*return this.obstacles.some(
+  collisionObstacle() {
+    return this.obstacles.some(
       obs =>
         this.player.posX + this.player.width > obs.posX &&
-        obs.posX + obs.width > this.player.posX &&
+        this.player.posX < obs.posX + obs.width &&
         this.player.posY + this.player.height > obs.posY &&
-        obs.posY + obs.height > this.player.posY
-    );*/
+        this.player.posY < obs.posY + obs.height
+    );
   }
 
   clearObstacles() {
@@ -124,55 +159,57 @@ class Game {
 
   collisionStar() {
     return (
-      this.player.posX < this.goal.posX + this.goal.width &&
-      this.player.posX + this.player.width >= this.goal.posX &&
-      this.player.posY <= this.goal.posY
+      this.player.posX < this.mission.posX + this.mission.width &&
+      this.player.posX + this.player.width >= this.mission.posX &&
+      this.player.posY <= this.mission.posY
     );
   }
 
   winStar() {
-    let starElement = document.getElementById("star-" + this.counterStar);
+    let starElement = document.getElementById("star-" + this.counterMission);
 
     if (starElement) {
-      starElement.setAttribute("src", this.imageStar);
-      this.counterStar++;
+      starElement.setAttribute("src", this.missionImage);
+      this.counterMission++;
     }
 
-    this.counterStar >= 3
+    this.counterMission >= 3
       ? (this.status = this.statusKey.WINNER)
-      : this.reset();
+      : this.restart();
   }
 
   updateTime() {
     this.time -= 0.1;
     this.progressBarElement.style.height = this.time + "%";
 
-    if (this.time <= 0 && this.counterLives > 0) {
-      this.counterLives--;
-      this.livesElement.textContent--;
+    if (this.time <= 0 && this.counterLives > 0) this.loseLive();
+  }
 
-      this.counterLives === 0
-        ? (this.status = this.statusKey.LOSER)
-        : this.reset();
-    }
+  loseLive() {
+    this.counterLives--;
+    this.livesElement.textContent--;
+
+    this.counterLives === 0
+      ? (this.status = this.statusKey.LOSER)
+      : this.restart();
   }
 
   gameStatus() {
-    this.status === this.statusKey.WINNER
-      ? this.playerWinner()
-      : this.status === this.statusKey.LOSER
-      ? this.playerGameOver()
+    return this.status === this.statusKey.WINNER ||
+      this.status === this.statusKey.LOSER
+      ? this.finalScreen()
       : null;
   }
 
-  playerWinner() {
-    console.log("YOU ARE WINNER");
-    // Añadir mensaje ganador en caso de acabar el juego
-    // Cuando haya implementados mas niveles -> continuar al siguiente nivel.
-  }
+  finalScreen() {
+    document.getElementById("option-board").style.display = "flex";
+    this.canvas.style.display = "none";
+    this.mainTitleOption.style.display = "none";
+    this.statusTitleOption.style.display = "block";
+    this.textQuestionOption.style.display = "block";
 
-  playerGameOver() {
-    console.log("YOU ARE A LOSER");
-    // Añadir mensaje de perdedor y dar opcion a reiniciar el juego.
+    this.status === this.statusKey.WINNER
+      ? (this.statusTitleOption.textContent = "¡WINNER!")
+      : (this.statusTitleOption.textContent = "GAME OVER");
   }
 }
