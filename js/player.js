@@ -10,8 +10,8 @@ class Player {
 
     this.keys = keys;
 
-    this.width = 80;
-    this.height = 80;
+    this.width = 60;
+    this.height = 60;
 
     this.posX0 = this.gameWidth / 2 - this.width / 2;
     this.posY0 = this.gameHeight - this.height * 0.85;

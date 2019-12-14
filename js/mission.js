@@ -8,8 +8,8 @@ class Mission {
     this.image = new Image();
     this.image.src = image;
 
-    this.width = 30;
-    this.height = 30;
+    this.width = 25;
+    this.height = 25;
 
     this.posMax = this.gameWidth - this.width;
     this.posMin = this.width;

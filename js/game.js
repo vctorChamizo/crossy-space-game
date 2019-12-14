@@ -43,7 +43,12 @@ class Game {
     /* Obstacles */
     this.obstacle;
     this.obstacles;
-    this.typeObstacle = {};
+    this.typeObstacle = {
+      PLANET: 1,
+      MARTIAN: 2,
+      METEORITE: 3,
+      SATELLITE: 4
+    };
   }
 
   start() {
@@ -66,6 +71,8 @@ class Game {
       let starElement = document.getElementById("star-" + i);
       if (starElement) starElement.setAttribute("src", this.missionImageEmpty);
     }
+
+    this.livesText.textContent = 3;
   }
 
   restart() {
@@ -97,7 +104,9 @@ class Game {
 
   /****** OBSTACLES ******/
   generateObstacles() {
-    this.obstacles.push(new Obstacle(this.ctx, this.width, this.height));
+    this.obstacles.push(
+      new Obstacle(this.ctx, this.width, this.height, this.typeObstacle)
+    );
   }
 
   collisionObstacle() {
@@ -111,7 +120,9 @@ class Game {
   }
 
   clearObstacles() {
-    this.obstacles = this.obstacles.filter(obstacle => obstacle.posX >= 0);
+    this.obstacles = this.obstacles.filter(
+      obstacle => obstacle.posX >= 0 && obstacle.posX <= this.width
+    );
   }
   /************************/
 

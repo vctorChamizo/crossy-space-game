@@ -15,6 +15,9 @@ window.onload = () => {
     game.gameStatus() !== null
       ? window.cancelAnimationFrame(requestID)
       : window.requestAnimationFrame(step);
+
+    if (framesCounter % 25 === 0) game.generateObstacles();
+    game.clearObstacles();
   }
 
   document.getElementById("continue-btn").onclick = () => {
