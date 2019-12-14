@@ -123,15 +123,17 @@ class Game {
   }
 
   updateTime() {
+    this.time -= 6.6;
+    this.progressBarElement.style.height = this.time + "%";
+
     if (this.time <= 0 && this.counterLives > 0) {
       this.counterLives--;
       this.livesElement.textContent--;
 
-      if (this.counterLives === 0) this.status = this.statusKey.LOSER;
+      this.counterLives === 0
+        ? (this.status = this.statusKey.LOSER)
+        : this.reset();
     }
-
-    this.time -= 3.3;
-    this.progressBarElement.style.height = this.time + "%";
   }
 
   gameStatus() {
