@@ -26,8 +26,8 @@ class Game {
     this.imageStar;
     this.counterStar = 0;
 
-    this.level = 1;
-    this.subLevel = 0;
+    this.obstacles = [];
+    this.typeObstacle = {};
 
     this.status = undefined;
     this.statusKey = {
@@ -101,9 +101,8 @@ class Game {
 
   collisionStar() {
     return (
-      this.player.posX + this.player.height / 2 >= this.goal.posX &&
-      this.player.posX + this.player.height / 2 <=
-        this.goal.posX + this.goal.width &&
+      this.player.posX < this.goal.posX + this.goal.width &&
+      this.player.posX + this.player.width >= this.goal.posX &&
       this.player.posY <= this.goal.posY
     );
   }
