@@ -26,6 +26,7 @@ class Game {
     this.imageStar;
     this.counterStar = 0;
 
+    this.obstacle;
     this.obstacles = [];
     this.typeObstacle = {};
 
@@ -93,10 +94,32 @@ class Game {
 
   update() {
     this.goal.draw();
+    this.obstacles.forEach(obstacle => obstacle.draw());
+
     this.ctx.save();
     this.player.move();
     this.player.draw();
     this.ctx.restore();
+
+    this.obstacles.forEach(obstacle => obstacle.move());
+  }
+
+  generateObstacles() {
+    this.obstacles.push(new Obstacle(this.ctx, this.width, this.height));
+  }
+
+  isCollision() {
+    /*return this.obstacles.some(
+      obs =>
+        this.player.posX + this.player.width > obs.posX &&
+        obs.posX + obs.width > this.player.posX &&
+        this.player.posY + this.player.height > obs.posY &&
+        obs.posY + obs.height > this.player.posY
+    );*/
+  }
+
+  clearObstacles() {
+    this.obstacles = this.obstacles.filter(obstacle => obstacle.posX >= 0);
   }
 
   collisionStar() {
@@ -121,7 +144,7 @@ class Game {
   }
 
   updateTime() {
-    this.time -= 6.6;
+    this.time -= 0.1;
     this.progressBarElement.style.height = this.time + "%";
 
     if (this.time <= 0 && this.counterLives > 0) {

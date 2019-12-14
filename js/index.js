@@ -5,10 +5,11 @@ window.onload = () => {
   function step(timestap) {
     framesCounter++;
 
-    if (framesCounter % 60 === 0) {
-      framesCounter = 0;
+    if (framesCounter % 1 === 0) {
       game.updateTime();
     }
+
+    if (framesCounter % 240 === 0) game.generateObstacles();
 
     game.clearAll();
     game.update();
