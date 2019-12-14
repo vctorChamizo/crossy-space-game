@@ -11,8 +11,7 @@ window.onload = () => {
     }
 
     game.clearAll();
-    game.drawAll();
-    game.moveAll();
+    game.update();
 
     if (game.collisionStar()) game.winStar();
 

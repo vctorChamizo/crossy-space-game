@@ -17,9 +17,12 @@ class Player {
     this.posY0 = this.gameHeight - this.height * 0.85;
     this.posX = this.posX0;
     this.posY = this.posY0;
+    this.translateX;
+    this.translateY;
 
     this.direction = this.keys.UP;
-    this.velocity = 8;
+    this.velocity = 0;
+    this.degrees = 0;
 
     this.setListeners();
   }
@@ -34,47 +37,67 @@ class Player {
     );
   }
 
-  move() {}
+  move() {
+    this.direction === this.keys.UP || this.direction === this.keys.DOWN
+      ? (this.posY += this.velocity)
+      : (this.posX += this.velocity);
+
+    this.translateX = this.posX + this.width / 2;
+    this.translateY = this.posY + this.height / 2;
+
+    this.ctx.translate(this.translateX, this.translateY);
+    this.ctx.rotate((Math.PI / 180) * this.degrees);
+    this.ctx.translate(-this.translateX, -this.translateY);
+  }
 
   setListeners() {
     document.addEventListener("keydown", e => {
       switch (e.keyCode) {
         case this.keys.UP:
-          if (this.posY > 0) this.posY -= this.velocity;
+          this.posY > 0 ? (this.velocity = -10) : (this.velocity = 0);
+
+          if (this.direction === this.keys.UP) this.degrees = 0;
+          else if (this.direction === this.keys.DOWN) this.degrees = 180;
+          else if (this.direction === this.keys.LEFT) this.degrees = -90;
+          else this.degrees = 90;
+
+          this.direction = this.keys.UP;
+
           break;
 
         case this.keys.DOWN:
-          if (this.posY < this.gameHeight - this.height * 0.85) {
-            this.posY += this.velocity;
-          }
+          this.posY < this.gameHeight - this.height * 0.85
+            ? (this.velocity = 10)
+            : (this.velocity = 0);
+
+          if (this.direction === this.keys.UP) this.degrees = 180;
+          else if (this.direction === this.keys.DOWN) this.degrees = 0;
+          else if (this.direction === this.keys.LEFT) this.degrees = -90;
+          else this.degrees = 90;
+
+          this.direction = this.keys.DOWN;
 
           break;
 
         case this.keys.RIGHT:
-          if (this.posX < this.gameWidth - this.height * 0.85)
-            this.posX += this.velocity;
+          this.posX < this.gameWidth - this.height * 0.85
+            ? (this.velocity = 10)
+            : (this.velocity = 0);
+
+          this.direction = this.keys.RIGHT;
           break;
 
         case this.keys.LEFT:
-          if (this.posX > 0) this.posX -= this.velocity;
+          this.posX > 0 ? (this.velocity = -10) : (this.velocity = 0);
+
+          this.direction = this.keys.LEFT;
           break;
       }
     });
 
     document.addEventListener("keyup", e => {
-      switch (e) {
-        case this.keys.UP:
-          break;
-
-        case this.keys.DOWN:
-          break;
-
-        case this.keys.RIGHT:
-          break;
-
-        case this.keys.LEFT:
-          break;
-      }
+      this.velocity = 0;
+      this.degrees = 0;
     });
   }
 }

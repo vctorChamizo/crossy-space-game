@@ -91,13 +91,12 @@ class Game {
     this.ctx.clearRect(0, 0, this.width, this.height);
   }
 
-  drawAll() {
-    this.player.draw();
+  update() {
     this.goal.draw();
-  }
-
-  moveAll() {
-    //console.log("Mueve el juego");
+    this.ctx.save();
+    this.player.move();
+    this.player.draw();
+    this.ctx.restore();
   }
 
   collisionStar() {
@@ -139,7 +138,7 @@ class Game {
   gameStatus() {
     this.status === this.statusKey.WINNER
       ? this.playerWinner()
-      : this.status === this.statusKey.WINNER
+      : this.status === this.statusKey.LOSER
       ? this.playerGameOver()
       : null;
   }
