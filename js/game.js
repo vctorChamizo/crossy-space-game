@@ -1,6 +1,6 @@
 class Game {
   constructor() {
-    /* Global Context */
+    /* Game Board */
     this.canvas;
     this.ctx;
     this.width;
@@ -14,12 +14,24 @@ class Game {
 
     /* Player */
     this.player;
+    this.status;
+    this.statusKey = {
+      WINNER: "Winner",
+      LOSER: "Loser"
+    };
     this.keys = {
       UP: 38,
       DOWN: 40,
       RIGHT: 39,
       LEFT: 37
     };
+
+    /* Info Player Items */
+    this.infoPlayerContainer;
+    this.livesText;
+    this.progressBar;
+    this.time;
+    this.counterLives;
 
     /* Mission */
     this.mission;
@@ -28,51 +40,17 @@ class Game {
     this.counterMission;
     this.missionImageEmpty;
 
-    this.infoPlayerElement;
-    this.livesElement;
-    this.progressBarElement;
-    this.time;
-    this.counterLives;
-
+    /* Obstacles */
     this.obstacle;
     this.obstacles;
     this.typeObstacle = {};
-
-    this.status;
-    this.statusKey = {
-      WINNER: "Winner",
-      LOSER: "Loser"
-    };
   }
 
   start() {
-    document.getElementById("option-board").style.display = "none";
+    this.loadElements();
 
-    this.canvas = document.getElementById("game-board");
-    this.canvas.style.display = "block";
-
-    this.ctx = this.canvas.getContext("2d");
-    this.width = this.canvas.width;
-    this.height = this.canvas.height;
-
-    this.infoPlayerElement = document.getElementById("info-player-container");
-    this.infoPlayerElement.style.visibility = "visible";
-
-    this.missionContainer = document.getElementById("info-goals-container");
-    this.missionContainer.style.visibility = "visible";
-    this.starElement = this.setPlayerOnBoard();
-    this.setGoalOnBoard();
-
-    this.livesElement = document.getElementById("lives-player");
-    this.progressBarElement = document.getElementById("progress-bar");
-    this.missionImage = "/res/img/star.svg";
-    this.missionImageEmpty = "/res/img/star-empty.svg";
-
-    this.mainTitleOption = document.getElementById("main-title-option-board");
-    this.statusTitleOption = document.getElementById(
-      "status-title-option-board"
-    );
-    this.textQuestionOption = document.getElementById("text-option-board");
+    this.setPlayerOnBoard();
+    this.setMissionOnBoard();
 
     this.init();
   }
@@ -84,61 +62,40 @@ class Game {
     this.status = undefined;
     this.obstacles = [];
 
-    this.initStars();
-  }
-
-  initStars() {
-    let starElement;
-
     for (let i = 0; i < 3; ++i) {
-      starElement = document.getElementById("star-" + i);
+      let starElement = document.getElementById("star-" + i);
       if (starElement) starElement.setAttribute("src", this.missionImageEmpty);
     }
   }
 
-  setPlayerOnBoard() {
-    this.player = new Player(
-      this.ctx,
-      this.width,
-      this.height,
-      "/res/img/spaces_ships_player/Spaceship_05.svg",
-      this.keys
-    );
-  }
-
-  setGoalOnBoard() {
-    this.mission = new Mission(
-      this.ctx,
-      this.width,
-      this.height,
-      "/res/img/star.svg"
-    );
-  }
-
   restart() {
     this.time = 100;
-    this.progressBarElement.style.height = this.time + "%";
+    this.progressBar.style.height = this.time + "%";
 
     this.setPlayerOnBoard();
-    this.setGoalOnBoard();
+    this.setMissionOnBoard();
   }
 
-  clearAll() {
+  clear() {
     this.ctx.clearRect(0, 0, this.width, this.height);
   }
 
   update() {
+    this.updateTime();
     this.mission.draw();
     this.obstacles.forEach(obstacle => obstacle.draw());
+    this.updatePlayer();
+    this.obstacles.forEach(obstacle => obstacle.move());
+  }
 
+  updatePlayer() {
     this.ctx.save();
     this.player.move();
     this.player.draw();
     this.ctx.restore();
-
-    this.obstacles.forEach(obstacle => obstacle.move());
   }
 
+  /****** OBSTACLES ******/
   generateObstacles() {
     this.obstacles.push(new Obstacle(this.ctx, this.width, this.height));
   }
@@ -156,8 +113,10 @@ class Game {
   clearObstacles() {
     this.obstacles = this.obstacles.filter(obstacle => obstacle.posX >= 0);
   }
+  /************************/
 
-  collisionStar() {
+  /****** MISSION ******/
+  collisionMission() {
     return (
       this.player.posX < this.mission.posX + this.mission.width &&
       this.player.posX + this.player.width >= this.mission.posX &&
@@ -165,7 +124,7 @@ class Game {
     );
   }
 
-  winStar() {
+  winMission() {
     let starElement = document.getElementById("star-" + this.counterMission);
 
     if (starElement) {
@@ -177,23 +136,27 @@ class Game {
       ? (this.status = this.statusKey.WINNER)
       : this.restart();
   }
+  /************************/
 
+  /****** INFO PLAYER ITEMS ******/
   updateTime() {
     this.time -= 0.1;
-    this.progressBarElement.style.height = this.time + "%";
+    this.progressBar.style.height = this.time + "%";
 
-    if (this.time <= 0 && this.counterLives > 0) this.loseLive();
+    if (this.time <= 0 && this.counterLives > 0) this.playerLoseLive();
   }
 
-  loseLive() {
+  playerLoseLive() {
     this.counterLives--;
-    this.livesElement.textContent--;
+    this.livesText.textContent--;
 
     this.counterLives === 0
       ? (this.status = this.statusKey.LOSER)
       : this.restart();
   }
+  /************************/
 
+  /****** STATUS GAME ******/
   gameStatus() {
     return this.status === this.statusKey.WINNER ||
       this.status === this.statusKey.LOSER
@@ -202,7 +165,7 @@ class Game {
   }
 
   finalScreen() {
-    document.getElementById("option-board").style.display = "flex";
+    this.optionMenu.style.display = "flex";
     this.canvas.style.display = "none";
     this.mainTitleOption.style.display = "none";
     this.statusTitleOption.style.display = "block";
@@ -212,4 +175,56 @@ class Game {
       ? (this.statusTitleOption.textContent = "¡WINNER!")
       : (this.statusTitleOption.textContent = "GAME OVER");
   }
+  /************************/
+
+  /****** Load elements on Board ******/
+  loadElements() {
+    /* Game Board */
+    this.canvas = document.getElementById("game-board");
+    this.canvas.style.display = "block";
+    this.ctx = this.canvas.getContext("2d");
+    this.width = this.canvas.width;
+    this.height = this.canvas.height;
+
+    /* Option Menu */
+    this.optionMenu = document.getElementById("option-board");
+    this.mainTitleOption = document.getElementById("main-title-option-board");
+    this.statusTitleOption = document.getElementById(
+      "status-title-option-board"
+    );
+    this.textQuestionOption = document.getElementById("text-option-board");
+    this.optionMenu.style.display = "none";
+
+    /* Info Player Items */
+    this.infoPlayerContainer = document.getElementById("info-player-container");
+    this.livesText = document.getElementById("lives-player");
+    this.progressBar = document.getElementById("progress-bar");
+    this.infoPlayerContainer.style.visibility = "visible";
+
+    /* Mission */
+    this.missionContainer = document.getElementById("mission-container");
+    this.missionImage = "/res/img/star.svg";
+    this.missionImageEmpty = "/res/img/star-empty.svg";
+    this.missionContainer.style.visibility = "visible";
+  }
+
+  setPlayerOnBoard() {
+    this.player = new Player(
+      this.ctx,
+      this.width,
+      this.height,
+      "/res/img/spaces_ships_player/Spaceship_05.svg",
+      this.keys
+    );
+  }
+
+  setMissionOnBoard() {
+    this.mission = new Mission(
+      this.ctx,
+      this.width,
+      this.height,
+      "/res/img/star.svg"
+    );
+  }
+  /************************/
 }

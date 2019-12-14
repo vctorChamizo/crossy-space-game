@@ -152,11 +152,8 @@ h1 {
   margin-top: 30%;
 }
 
-#info-player-container {
-  visibility: hidden;
-}
-
-#info-goals-container {
+#info-player-container,
+#mission-container {
   visibility: hidden;
 }
 

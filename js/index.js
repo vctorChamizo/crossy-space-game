@@ -3,20 +3,14 @@ window.onload = () => {
   let framesCounter = 0;
   let requestID;
 
-  function step(timestap) {
+  function step() {
     framesCounter++;
+    game.clear();
 
-    if (framesCounter % 1 === 0) {
-      game.updateTime();
-    }
-
-    if (framesCounter % 240 === 0) game.generateObstacles();
-
-    game.clearAll();
     game.update();
 
-    if (game.collisionObstacle()) game.loseLive();
-    if (game.collisionStar()) game.winStar();
+    if (game.collisionObstacle()) game.playerLoseLive();
+    if (game.collisionMission()) game.winMission();
 
     game.gameStatus() !== null
       ? window.cancelAnimationFrame(requestID)

@@ -8,9 +8,6 @@ class Player {
     this.image = new Image();
     this.image.src = image;
 
-    this.imageDeath = new Image();
-    this.imageDeath.src = "/res/img/death.svg";
-
     this.keys = keys;
 
     this.width = 80;
@@ -40,22 +37,8 @@ class Player {
     );
   }
 
-  drawDeath() {
-    this.ctx.drawImage(
-      this.imageDeath,
-      this.posX,
-      this.posY,
-      this.width,
-      this.height
-    );
-  }
-
   move() {
-    if (this.direction === this.keys.UP) this.degrees = 0;
-    else if (this.direction === this.keys.DOWN) this.degrees = 180;
-    else if (this.direction === this.keys.LEFT) this.degrees = 270;
-    else this.degrees = 90;
-
+    // Velocity
     if (this.direction === this.keys.UP && this.posY > 0)
       this.posY += this.velocity;
     else if (
@@ -70,6 +53,12 @@ class Player {
       this.posX += this.velocity;
     else if (this.direction === this.keys.LEFT && this.posX > 0)
       this.posX += this.velocity;
+
+    // Rotation
+    if (this.direction === this.keys.UP) this.degrees = 0;
+    else if (this.direction === this.keys.DOWN) this.degrees = 180;
+    else if (this.direction === this.keys.LEFT) this.degrees = 270;
+    else this.degrees = 90;
 
     this.translateX = this.posX + this.width / 2;
     this.translateY = this.posY + this.height / 2;
@@ -101,6 +90,10 @@ class Player {
         case this.keys.LEFT:
           this.velocity = -10;
           this.direction = this.keys.LEFT;
+          break;
+
+        default:
+          this.velocity = 0;
           break;
       }
     });
