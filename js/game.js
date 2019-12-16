@@ -43,12 +43,6 @@ class Game {
     /* Obstacles */
     this.obstacle;
     this.obstacles;
-    this.typeObstacle = {
-      PLANET: 1,
-      MARTIAN: 2,
-      METEORITE: 3,
-      SATELLITE: 4
-    };
   }
 
   start() {
@@ -104,9 +98,7 @@ class Game {
 
   /****** OBSTACLES ******/
   generateObstacles() {
-    this.obstacles.push(
-      new Obstacle(this.ctx, this.width, this.height, this.typeObstacle)
-    );
+    this.obstacles.push(new Obstacle(this.ctx, this.width, this.height));
   }
 
   collisionObstacle() {
@@ -121,7 +113,8 @@ class Game {
 
   clearObstacles() {
     this.obstacles = this.obstacles.filter(
-      obstacle => obstacle.posX >= 0 && obstacle.posX <= this.width
+      obstacle =>
+        obstacle.posX >= -obstacle.width && obstacle.posX <= this.width
     );
   }
   /************************/

@@ -157,6 +157,27 @@ h1 {
   visibility: hidden;
 }
 
+.space-ship-container {
+  width: 900px;
+  height: 250px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.space-ship-container * {
+  width: 300px;
+  height: 300px;
+}
+
+.arrows {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 7em;
+  color: yellow;
+}
+
 /**
   Progress Bar Style
 **/

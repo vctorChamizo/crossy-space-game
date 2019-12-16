@@ -16,7 +16,9 @@ window.onload = () => {
       ? window.cancelAnimationFrame(requestID)
       : window.requestAnimationFrame(step);
 
-    if (framesCounter % 25 === 0) game.generateObstacles();
+    if (framesCounter % 25 === 0) {
+      game.generateObstacles();
+    }
     game.clearObstacles();
   }
 

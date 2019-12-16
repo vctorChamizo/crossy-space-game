@@ -12,10 +12,12 @@
 
     <link rel="shortcut icon" href="./res/img/crossy-space-favicon.ico" />
 
+    <script type="text/javascript" src="/js/obstacle_data.js"></script>
     <script type="text/javascript" src="/js/obstacle.js"></script>
     <script type="text/javascript" src="/js/mission.js"></script>
-    <script type="text/javascript" src="/js/board.js"></script>
+    <script type="text/javascript" src="/js/space_ship_date.js"></script>
     <script type="text/javascript" src="/js/player.js"></script>
+    <script type="text/javascript" src="/js/safe-area.js"></script>
     <script type="text/javascript" src="/js/game.js"></script>
     <script type="text/javascript" src="/js/index.js"></script>
   </head>
@@ -43,8 +45,17 @@
       <div class="board-wrapper">
         <div id="option-board">
           <h2 id="main-title-option-board" class="stroke">
-            LEVEL 1
+            Choose your space ship
           </h2>
+          <div class="space-ship-container">
+            <div id="arrow-left" class="arrows">&laquo;</div>
+            <img
+              id="space-ship"
+              src="/res/img/spaces_ships_player/Spaceship_01.svg"
+              alt=""
+            />
+            <div id="arrow-right" class="arrows">&raquo;</div>
+          </div>
           <h2 id="status-title-option-board" class="stroke"></h2>
           <p id="text-option-board" class="stroke">
             ¿Do you want to try again?
