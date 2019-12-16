@@ -1,6 +1,10 @@
 # Crossy Space | Game
+Crossy Space is the first project of IronHack bootcamp Web Developmet that consists in a game based on retro game [Frogger](https://en.wikipedia.org/wiki/Frogger) developed with web technologies.
 
 ## Introduction
+The player plays a battle sapce ship that wants to cross the space to a safe area. Along the way you will find various obstacles that you must avoid in order not to lose your lives.
+
+The game consists of several levels of difficulty and the battle sapce ship will lose their lives if one of the obstacles hits it or if it does not reach the safe area of the sapce before the countdown ends.
 
 ## Documentation
 
