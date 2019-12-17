@@ -11,9 +11,11 @@ class Game {
     this.mainTitleOption;
     this.statusTitleOption;
     this.textQuestionOption;
+    this.spaceShipChooserOption;
 
     /* Player */
     this.player;
+    this.spaceShipImg;
     this.status;
     this.statusKey = {
       WINNER: "Winner",
@@ -45,7 +47,9 @@ class Game {
     this.obstacles;
   }
 
-  start() {
+  start(spaceShipImg) {
+    this.spaceShipImg = spaceShipImg;
+
     this.loadElements();
 
     this.setPlayerOnBoard();
@@ -164,11 +168,11 @@ class Game {
   gameStatus() {
     return this.status === this.statusKey.WINNER ||
       this.status === this.statusKey.LOSER
-      ? this.finalScreen()
+      ? this.showGameStatus()
       : null;
   }
 
-  finalScreen() {
+  showGameStatus() {
     this.optionMenu.style.display = "flex";
     this.canvas.style.display = "none";
     this.mainTitleOption.style.display = "none";
@@ -197,6 +201,8 @@ class Game {
       "status-title-option-board"
     );
     this.textQuestionOption = document.getElementById("text-option-board");
+    this.spaceShipChooserOption = document.getElementById("space-ship-chooser");
+    this.spaceShipChooserOption.style.display = "none";
     this.optionMenu.style.display = "none";
 
     /* Info Player Items */
@@ -217,7 +223,7 @@ class Game {
       this.ctx,
       this.width,
       this.height,
-      "/res/img/spaces_ships_player/Spaceship_05.svg",
+      this.spaceShipImg,
       this.keys
     );
   }

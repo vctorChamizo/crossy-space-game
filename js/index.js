@@ -3,10 +3,17 @@ window.onload = () => {
   let framesCounter = 0;
   let requestID;
 
+  let startGameBtn = document.getElementById("start-game-btn");
+  let spaceShipImageOption = document.getElementById("space-ship-img");
+  let arrowRightOption = document.getElementById("arrow-right");
+  let arrowLeftOption = document.getElementById("arrow-left");
+
+  let index = 0;
+
   function step() {
     framesCounter++;
-    game.clear();
 
+    game.clear();
     game.update();
 
     if (game.collisionObstacle()) game.playerLoseLive();
@@ -22,8 +29,18 @@ window.onload = () => {
     game.clearObstacles();
   }
 
-  document.getElementById("continue-btn").onclick = () => {
-    game.start();
+  startGameBtn.onclick = () => {
+    game.start(spaceShips[index].src);
     requestID = window.requestAnimationFrame(step);
+  };
+
+  arrowLeftOption.onclick = () => {
+    index = index == 0 ? spaceShips.length - 1 : --index;
+    spaceShipImageOption.setAttribute("src", spaceShips[index].src);
+  };
+
+  arrowRightOption.onclick = () => {
+    index = index == (spaceShips.length - 1) ? 0 : ++index;
+    spaceShipImageOption.setAttribute("src", spaceShips[index].src);
   };
 };
