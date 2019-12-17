@@ -18,6 +18,10 @@ window.onload = () => {
 
     if (game.collisionObstacle()) game.playerLoseLive();
     if (game.collisionMission()) game.winMission();
+    if (game.collisionToxic()) {
+      game.removeToxicItem();
+      // Invertir las colisiones de los obstaculos.
+    }
 
     game.gameStatus() !== null
       ? window.cancelAnimationFrame(requestID)
@@ -40,7 +44,7 @@ window.onload = () => {
   };
 
   arrowRightOption.onclick = () => {
-    index = index == (spaceShips.length - 1) ? 0 : ++index;
+    index = index == spaceShips.length - 1 ? 0 : ++index;
     spaceShipImageOption.setAttribute("src", spaceShips[index].src);
   };
 };

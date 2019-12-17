@@ -1,31 +1,26 @@
 class Obstacle {
   constructor(ctx, gameWidth, gameHeight, typeObstacle) {
     this.ctx = ctx;
-
     this.gameWidth = gameWidth;
     this.gameHeight = gameHeight;
 
     this.height = 30;
+    this.width = 30;
 
-    this.min = 0;
-    this.max = 7;
-    this.type = Math.floor(Math.random() * (this.max - this.min)) + this.min;
+    this.obstacle = obstacles[Math.floor(Math.random() * obstacles.length)];
 
-    this.image = new Image();
+    this.posY = this.obstacle.posY;
+    this.posX = 0;
 
-    this.obstacle = obstacles[this.type];
+    this.vx = 2.5;
 
     if (this.obstacle.direction === "left") {
       this.posX = this.gameWidth;
       this.vx = -2.5;
-    } else {
-      this.posX = 0;
-      this.vx = 2.5;
     }
 
-    this.posY = this.obstacle.posY;
+    this.image = new Image();
     this.image.src = this.obstacle.image;
-    this.width = this.obstacle.width;
   }
 
   draw() {
