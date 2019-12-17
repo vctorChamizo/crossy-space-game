@@ -4,7 +4,84 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
     <title>Crossy Space</title>
+
+    <link rel="stylesheet" href="/stylesheet/reset.css" />
+    <link rel="stylesheet" href="/stylesheet/style.css" />
+
+    <link rel="shortcut icon" href="./res/img/crossy-space-favicon.ico" />
+
+    <script type="text/javascript" src="/js/obstacle_data.js"></script>
+    <script type="text/javascript" src="/js/obstacle.js"></script>
+    <script type="text/javascript" src="/js/mission.js"></script>
+    <script type="text/javascript" src="/js/space_ship_data.js"></script>
+    <script type="text/javascript" src="/js/player.js"></script>
+    <script type="text/javascript" src="/js/game.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
   </head>
-  <body></body>
+  <body>
+    <h1 class="stroke">Crossy {</h1>
+    <div class="space"></div>
+
+    <div class="game">
+      <!-- Progress Bar and Lives Counter Container -->
+      <div id="info-player-container" class="info-wrapper">
+        <div class="stroke">
+          <h2 class="title-items">LIVES</h2>
+          <p id="lives-player" class="title-items">3</p>
+        </div>
+
+        <div>
+          <h2 class="stroke title-items">TIME</h2>
+          <div id="progress">
+            <div id="progress-bar"></div>
+          </div>
+        </div>
+      </div>
+      <!---------------------->
+
+      <!-- Option Board and Game Board Container -->
+      <div class="board-wrapper">
+        <!-- Option Board -->
+        <div id="option-board">
+          <h2 id="main-title-option-board" class="stroke">
+            Choose your space ship
+          </h2>
+          <!-- Space Shipe Chooser -->
+          <div id="space-ship-chooser" class="space-ship-container">
+            <div id="arrow-left" class="arrows">&laquo;</div>
+            <img
+              id="space-ship-img"
+              src="/res/img/spaces_ships_player/Spaceship_01.svg"
+              alt="space-ship-img"
+            />
+            <div id="arrow-right" class="arrows">&raquo;</div>
+          </div>
+          <!---------------------->
+          <h2 id="status-title-option-board" class="stroke"></h2>
+          <p id="text-option-board" class="stroke">
+            ¿Do you want to try again?
+          </p>
+          <button id="start-game-btn">Start Game</button>
+        </div>
+        <!---------------------->
+        <!-- Game Board -->
+        <canvas id="game-board" width="980px" height="500px"></canvas>
+        <!---------------------->
+      </div>
+
+      <!-- Mission Container -->
+      <div id="mission-container" class="info-wrapper">
+        <h2 class="stroke title-items">SCORE</h2>
+
+        <div class="mission-wrapper">
+          <img id="star-0" class="mission" />
+          <img id="star-1" class="mission" />
+          <img id="star-2" class="mission" />
+        </div>
+      </div>
+      <!---------------------->
+    </div>
+  </body>
 </html>
