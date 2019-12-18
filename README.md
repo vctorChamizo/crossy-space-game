@@ -10,12 +10,30 @@ The game consists of several levels of difficulty and the battle sapce ship will
 
 ## Project Content
   ```
-  ├───js
-  ├───res
-  │   ├───font
-  │   └───img
-  │       └───spaces_ships_player
-  └───stylesheet
+.
+├── index.html
+├── js
+│   ├── game.js
+│   ├── index.js
+│   ├── mission.js
+│   ├── obstacle_data.js
+│   ├── obstacle.js
+│   ├── player.js
+│   └── space_ship_data.js
+├── README.md
+├── res
+│   ├── font
+│   │   ├── space-age.ttf
+│   │   └── space-age.txt
+│   └── img
+│       ├── crossy-space-favicon.ico
+│       ├── obstacles   
+│       ├── spaces_ships_player
+│       ├── star-empty.svg
+│       └── star.svg
+└── stylesheet
+    ├── reset.css
+    └── style.css
   ```
 
 ## Technologies
