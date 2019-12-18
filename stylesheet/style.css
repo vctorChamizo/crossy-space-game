@@ -1,6 +1,6 @@
 @font-face {
   font-family: "space-age";
-  src: url(/res/font/space-age.ttf);
+  src: url(../res/font/space-age.ttf);
 }
 
 /** BACKGROUND SPACE ANIMATION BORROWED FROM  Alan Crissey https://codepen.io/TheRealAlan/pen/gzqsy**/
