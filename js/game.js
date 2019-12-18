@@ -43,8 +43,13 @@ class Game {
     this.missionImageEmpty;
 
     /* Obstacles */
+    this.obstacles_data = obstacles_data;
     this.obstacle;
     this.obstacles;
+
+    /*Levels*/
+    this.level = 0;
+    this.toxics;
   }
 
   start(spaceShipImg) {
@@ -64,6 +69,7 @@ class Game {
     this.counterMission = 0;
     this.status = undefined;
     this.obstacles = [];
+    this.toxics = [];
 
     for (let i = 0; i < 3; ++i) {
       let starElement = document.getElementById("star-" + i);
@@ -79,6 +85,8 @@ class Game {
 
     this.setPlayerOnBoard();
     this.setMissionOnBoard();
+
+    this.checkLevel();
   }
 
   clear() {
@@ -87,8 +95,11 @@ class Game {
 
   update() {
     this.updateTime();
+
     this.mission.draw();
     this.obstacles.forEach(obstacle => obstacle.draw());
+    if (this.toxics.length > 0) this.toxics.forEach(toxic => toxic.draw());
+
     this.updatePlayer();
     this.obstacles.forEach(obstacle => obstacle.move());
   }
@@ -121,13 +132,25 @@ class Game {
         obstacle.posX >= -obstacle.width && obstacle.posX <= this.width
     );
   }
+
+  invertObstaclesParameters() {
+    this.obstacles_data.map(obs => {
+      obs.direction = obs.direction === "left" ? "right" : "left";
+    });
+  }
+
+  invertObstaclesOnBoard() {
+    this.obstacles.map(obs => {
+      obs.vx = -obs.vx;
+    });
+  }
   /************************/
 
   /****** MISSION ******/
   collisionMission() {
     return (
-      this.player.posX < this.mission.posX + this.mission.width &&
-      this.player.posX + this.player.width >= this.mission.posX &&
+      this.player.posX < this.mission.posX + this.mission.width / 2 &&
+      this.player.posX + this.player.width / 2 >= this.mission.posX &&
       this.player.posY <= this.mission.posY
     );
   }
@@ -138,11 +161,47 @@ class Game {
     if (starElement) {
       starElement.setAttribute("src", this.missionImage);
       this.counterMission++;
+      this.level++;
     }
 
     this.counterMission >= 3
       ? (this.status = this.statusKey.WINNER)
       : this.restart();
+  }
+  /************************/
+
+  /****** LEVELS ******/
+  checkLevel() {
+    if (this.level > 0) this.setToxicItem();
+    if (this.level > 1) undefined;
+  }
+
+  setToxicItem() {
+    this.toxics.push(
+      new Toxic(this.ctx, this.width, this.height, "/res/img/poison.svg")
+    );
+  }
+
+  collisionToxic() {
+    return this.toxics.length === 0
+      ? false
+      : this.toxics.some(
+          toxic =>
+            this.player.posX < toxic.posX + toxic.width &&
+            this.player.posX + this.player.width >= toxic.posX &&
+            this.player.posY <= toxic.posY
+        );
+  }
+
+  removeToxicItem() {
+    this.toxics = this.toxics.filter(
+      toxic =>
+        !(
+          this.player.posX < toxic.posX + toxic.width &&
+          this.player.posX + this.player.width >= toxic.posX &&
+          this.player.posY <= toxic.posY
+        )
+    );
   }
   /************************/
 
