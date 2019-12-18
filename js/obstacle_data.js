@@ -1,4 +1,4 @@
-let obstacles = [
+let obstacles_data = [
   {
     name: "planet",
     posY: 60,
@@ -30,15 +30,15 @@ let obstacles = [
     image: "/res/img/obstacles/death-star.svg"
   },
   {
-    name: "rocket",
-    posY: 360,
-    direction: "left",
-    image: "/res/img/obstacles/rocket.svg"
-  },
-  {
     name: "satellite",
     posY: 410,
     direction: "right",
     image: "/res/img/obstacles/satellite.svg"
+  },
+  {
+    name: "astronaut",
+    posY: 360,
+    direction: "left",
+    image: "/res/img/obstacles/astronaut.svg"
   }
 ];

@@ -7,7 +7,11 @@ class Obstacle {
     this.height = 30;
     this.width = 30;
 
-    this.obstacle = obstacles[Math.floor(Math.random() * obstacles.length)];
+    this.obstacles_data = obstacles_data;
+
+    this.obstacle = this.obstacles_data[
+      Math.floor(Math.random() * this.obstacles_data.length)
+    ];
 
     this.posY = this.obstacle.posY;
     this.posX = 0;

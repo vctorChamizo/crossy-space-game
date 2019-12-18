@@ -43,6 +43,7 @@ class Game {
     this.missionImageEmpty;
 
     /* Obstacles */
+    this.obstacles_data = obstacles_data;
     this.obstacle;
     this.obstacles;
 
@@ -131,13 +132,25 @@ class Game {
         obstacle.posX >= -obstacle.width && obstacle.posX <= this.width
     );
   }
+
+  invertObstaclesParameters() {
+    this.obstacles_data.map(obs => {
+      obs.direction = obs.direction === "left" ? "right" : "left";
+    });
+  }
+
+  invertObstaclesOnBoard() {
+    this.obstacles.map(obs => {
+      obs.vx = -obs.vx;
+    });
+  }
   /************************/
 
   /****** MISSION ******/
   collisionMission() {
     return (
-      this.player.posX < this.mission.posX + this.mission.width &&
-      this.player.posX + this.player.width >= this.mission.posX &&
+      this.player.posX < this.mission.posX + this.mission.width / 2 &&
+      this.player.posX + this.player.width / 2 >= this.mission.posX &&
       this.player.posY <= this.mission.posY
     );
   }
@@ -181,12 +194,13 @@ class Game {
   }
 
   removeToxicItem() {
-    debugger;
     this.toxics = this.toxics.filter(
       toxic =>
-        !(this.player.posX < toxic.posX + toxic.width &&
-        this.player.posX + this.player.width >= toxic.posX &&
-        this.player.posY <= toxic.posY)
+        !(
+          this.player.posX < toxic.posX + toxic.width &&
+          this.player.posX + this.player.width >= toxic.posX &&
+          this.player.posY <= toxic.posY
+        )
     );
   }
   /************************/
