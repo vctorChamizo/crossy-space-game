@@ -183,6 +183,8 @@ class Game {
       this.counterMission++;
     }
 
+    this.player.remove();
+    this.mission.remove();
     this.mission.drawWin();
 
     this.counterMission >= 3
@@ -231,6 +233,7 @@ class Game {
     this.counterLives--;
     this.livesText.textContent--;
 
+    this.player.remove();
     this.player.drawDeath();
 
     this.counterLives === 0
