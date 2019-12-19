@@ -16,12 +16,9 @@ class Obstacle {
     this.posY = this.obstacle.posY;
     this.posX = 0;
 
-    this.vx = 2.5;
+    this.vx = this.obstacle.vx;
 
-    if (this.obstacle.direction === "left") {
-      this.posX = this.gameWidth;
-      this.vx = -2.5;
-    }
+    if (this.obstacle.direction === "left") this.posX = this.gameWidth;
 
     this.image = new Image();
     this.image.src = this.obstacle.image;
@@ -38,6 +35,6 @@ class Obstacle {
   }
 
   move() {
-    this.posX += this.vx;
+    this.obstacle.direction === "left" ? this.posX -= this.vx : this.posX += this.vx;
   }
 }

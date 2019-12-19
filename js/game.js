@@ -141,7 +141,24 @@ class Game {
 
   invertObstaclesOnBoard() {
     this.obstacles.map(obs => {
-      obs.vx = -obs.vx;
+      obs.direction = obs.direction === "left" ? "right" : "left";
+    });
+  }
+
+  accelerateObstacles() {
+    this.accelerateObstaclesParameters();
+    this.accelerateObstaclesOnBoard();
+  }
+
+  accelerateObstaclesParameters() {
+    this.obstacles_data.map(obs => {
+      obs.vx *= 2;
+    });
+  }
+
+  accelerateObstaclesOnBoard() {
+    this.obstacles.map(obs => {
+      obs.vx += 2;
     });
   }
   /************************/
@@ -156,12 +173,14 @@ class Game {
   }
 
   winMission() {
+    this.level++;
+    if (this.level > 1) this.accelerateObstacles();
+
     let starElement = document.getElementById("star-" + this.counterMission);
 
     if (starElement) {
       starElement.setAttribute("src", this.missionImage);
       this.counterMission++;
-      this.level++;
     }
 
     this.counterMission >= 3
@@ -173,7 +192,6 @@ class Game {
   /****** LEVELS ******/
   checkLevel() {
     if (this.level > 0) this.setToxicItem();
-    if (this.level > 1) undefined;
   }
 
   setToxicItem() {
@@ -183,14 +201,12 @@ class Game {
   }
 
   collisionToxic() {
-    return this.toxics.length === 0
-      ? false
-      : this.toxics.some(
-          toxic =>
-            this.player.posX < toxic.posX + toxic.width &&
-            this.player.posX + this.player.width >= toxic.posX &&
-            this.player.posY <= toxic.posY
-        );
+    return this.toxics.some(
+      toxic =>
+        this.player.posX < toxic.posX + toxic.width &&
+        this.player.posX + this.player.width >= toxic.posX &&
+        this.player.posY <= toxic.posY
+    );
   }
 
   removeToxicItem() {
@@ -292,6 +308,8 @@ class Game {
       this.ctx,
       this.width,
       this.height,
+      25,
+      25,
       "/res/img/star.svg"
     );
   }

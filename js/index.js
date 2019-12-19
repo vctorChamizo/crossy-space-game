@@ -17,6 +17,9 @@ window.onload = () => {
     game.clear();
     game.update();
 
+    if (framesCounter % 25 === 0) game.generateObstacles();
+    game.clearObstacles();
+
     if (game.collisionObstacle()) {
       game.playerLoseLive();
       pause = true;
@@ -25,8 +28,7 @@ window.onload = () => {
       game.winMission();
       pause = true;
     }
-
-    if (game.collisionToxic()) {
+    if (game.level > 0 && game.collisionToxic()) {
       game.removeToxicItem();
       game.invertObstaclesParameters();
       game.invertObstaclesOnBoard();
@@ -40,11 +42,6 @@ window.onload = () => {
         pause = false;
       }, 150);
     }
-
-    if (framesCounter % 25 === 0) {
-      game.generateObstacles();
-    }
-    game.clearObstacles();
   }
 
   startGameBtn.onclick = () => {

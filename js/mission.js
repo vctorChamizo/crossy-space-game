@@ -1,5 +1,5 @@
 class Mission {
-  constructor(ctx, gameWidth, gameHeight, image) {
+  constructor(ctx, gameWidth, gameHeight, width, height, image) {
     this.ctx = ctx;
 
     this.gameWidth = gameWidth;
@@ -8,8 +8,8 @@ class Mission {
     this.image = new Image();
     this.image.src = image;
 
-    this.width = 25;
-    this.height = 25;
+    this.width = width;
+    this.height = height;
 
     this.posMax = this.gameWidth - this.width;
     this.posMin = this.width;
