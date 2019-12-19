@@ -18,8 +18,8 @@ class Game {
     this.spaceShipImg;
     this.status;
     this.statusKey = {
-      WINNER: "Winner",
-      LOSER: "Loser"
+      WINNER: 0,
+      LOSER: 1
     };
     this.keys = {
       UP: 38,
@@ -50,6 +50,15 @@ class Game {
     /*Levels*/
     this.level = 0;
     this.toxics;
+
+    /*Sounds*/
+    this.sounds;
+    this.keySounds = {
+      BATTLESHIP: 0,
+      OBSTACLE: 1,
+      MISSION: 2,
+      TOXIC: 3
+    };
   }
 
   start(spaceShipImg) {
@@ -86,7 +95,7 @@ class Game {
     this.setPlayerOnBoard();
     this.setMissionOnBoard();
 
-    if (this.level > 0 && this.toxics.length < 1) this.setToxicItem();
+    if (this.level > 0 && this.toxics.length <= 1) this.setToxicItem();
   }
 
   clear() {
@@ -94,8 +103,6 @@ class Game {
   }
 
   update() {
-    this.updateTime();
-
     this.mission.draw();
     this.obstacles.forEach(obstacle => obstacle.draw());
     if (this.toxics.length > 0) this.toxics.forEach(toxic => toxic.draw());
@@ -174,7 +181,7 @@ class Game {
 
   winMission() {
     this.level++;
-    if (this.level > 1) this.accelerateObstacles();
+    //if (this.level > 1) this.accelerateObstacles();
 
     let starElement = document.getElementById("star-" + this.counterMission);
 
@@ -226,7 +233,7 @@ class Game {
     this.time -= 0.1;
     this.progressBar.style.height = this.time + "%";
 
-    if (this.time <= 0 && this.counterLives > 0) this.playerLoseLive();
+    return this.time <= 0 && this.counterLives > 0;
   }
 
   playerLoseLive() {
@@ -260,6 +267,8 @@ class Game {
     this.status === this.statusKey.WINNER
       ? (this.statusTitleOption.textContent = "¡WINNER!")
       : (this.statusTitleOption.textContent = "GAME OVER");
+
+    return this.status;
   }
   /************************/
 
