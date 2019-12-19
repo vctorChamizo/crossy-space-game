@@ -41,15 +41,11 @@ class Player {
   }
 
   drawDeath() {
-    this.ctx.clearRect(this.posX, this.posY, this.width, this.height);
+    this.ctx.drawImage(this.imageDeath, this.posX, this.posY, 50, 50);
+  }
 
-    this.ctx.drawImage(
-      this.imageDeath,
-      this.posX,
-      this.posY,
-      50,
-      50
-    );
+  remove() {
+    this.ctx.clearRect(this.posX, this.posY, this.width, this.height);
   }
 
   move() {

@@ -31,12 +31,10 @@ class Mission {
   }
 
   drawWin() {
-    this.ctx.drawImage(
-      this.image,
-      this.posX,
-      this.posY,
-      50,
-      50
-    );
+    this.ctx.drawImage(this.image, this.posX, this.posY, 50, 50);
+  }
+
+  remove() {
+    this.ctx.clearRect(this.posX, this.posY, this.width, this.height);
   }
 }
