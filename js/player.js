@@ -1,5 +1,5 @@
 class Player {
-  constructor(ctx, gameWidth, gameHeight, image, keys) {
+  constructor(ctx, gameWidth, gameHeight, width, height, image, keys) {
     this.ctx = ctx;
 
     this.gameWidth = gameWidth;
@@ -8,10 +8,13 @@ class Player {
     this.image = new Image();
     this.image.src = image;
 
+    this.imageDeath = new Image();
+    this.imageDeath.src = "./res/img/death.svg";
+
     this.keys = keys;
 
-    this.width = 65;
-    this.height = 65;
+    this.width = width;
+    this.height = height;
 
     this.posX0 = this.gameWidth / 2 - this.width / 2;
     this.posY0 = this.gameHeight - this.height * 0.85;
@@ -34,6 +37,18 @@ class Player {
       this.posY,
       this.width,
       this.height
+    );
+  }
+
+  drawDeath() {
+    this.ctx.clearRect(this.posX, this.posY, this.width, this.height);
+
+    this.ctx.drawImage(
+      this.imageDeath,
+      this.posX,
+      this.posY,
+      50,
+      50
     );
   }
 

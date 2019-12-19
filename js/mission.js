@@ -29,4 +29,14 @@ class Mission {
       this.height
     );
   }
+
+  drawWin() {
+    this.ctx.drawImage(
+      this.image,
+      this.posX,
+      this.posY,
+      50,
+      50
+    );
+  }
 }

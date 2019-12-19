@@ -86,7 +86,7 @@ class Game {
     this.setPlayerOnBoard();
     this.setMissionOnBoard();
 
-    this.checkLevel();
+    if (this.level > 0 && this.toxics.length < 1) this.setToxicItem();
   }
 
   clear() {
@@ -158,7 +158,7 @@ class Game {
 
   accelerateObstaclesOnBoard() {
     this.obstacles.map(obs => {
-      obs.vx += 2;
+      obs.vx *= 2;
     });
   }
   /************************/
@@ -183,6 +183,8 @@ class Game {
       this.counterMission++;
     }
 
+    this.mission.drawWin();
+
     this.counterMission >= 3
       ? (this.status = this.statusKey.WINNER)
       : this.restart();
@@ -190,13 +192,9 @@ class Game {
   /************************/
 
   /****** LEVELS ******/
-  checkLevel() {
-    if (this.level > 0) this.setToxicItem();
-  }
-
   setToxicItem() {
     this.toxics.push(
-      new Toxic(this.ctx, this.width, this.height, "/res/img/poison.svg")
+      new Toxic(this.ctx, this.width, this.height, "./res/img/poison.svg")
     );
   }
 
@@ -232,6 +230,8 @@ class Game {
   playerLoseLive() {
     this.counterLives--;
     this.livesText.textContent--;
+
+    this.player.drawDeath();
 
     this.counterLives === 0
       ? (this.status = this.statusKey.LOSER)
@@ -298,6 +298,8 @@ class Game {
       this.ctx,
       this.width,
       this.height,
+      65,
+      65,
       this.spaceShipImg,
       this.keys
     );

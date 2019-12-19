@@ -40,7 +40,7 @@ window.onload = () => {
       setTimeout(() => {
         window.requestAnimationFrame(step);
         pause = false;
-      }, 150);
+      }, 300);
     }
   }
 
