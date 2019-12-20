@@ -2,7 +2,7 @@ let obstacles_data = [
   {
     posY: 60,
     direction: 1,
-    image: "/res/img/obstacles/saturn.svg"
+    image: "./res/img/obstacles/saturn.svg"
   },
   {
     posY: 100,
