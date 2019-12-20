@@ -1,3 +1,7 @@
+const MAX_LEVEL = 3;
+const MAX_LIVES = 3;
+const VELOCITY = 2.5;
+
 class Game {
   constructor() {
     /* Game Board */
@@ -38,6 +42,7 @@ class Game {
     /* Mission */
     this.mission;
     this.missionContainer;
+    this.missionWrapper;
     this.missionImage;
     this.counterMission;
     this.missionImageEmpty;
@@ -47,12 +52,12 @@ class Game {
     this.obstacle;
     this.obstacles;
     this.keysDirection = {
-      RIGHT: "right",
-      LEFT: "left"
+      RIGHT: 0,
+      LEFT: 1
     };
 
     /*Levels*/
-    this.level = 0;
+    this.level;
     this.toxics;
   }
 
@@ -70,19 +75,26 @@ class Game {
 
   init() {
     this.time = 100;
-    this.counterLives = 3;
+    this.counterLives = MAX_LIVES;
     this.counterMission = 0;
     this.status = undefined;
     this.obstacles = [];
     this.toxics = [];
+    this.level = 0;
 
-    for (let i = 0; i < 3; ++i) {
-      document
-        .getElementById("star-" + i)
-        .setAttribute("src", this.missionImageEmpty);
+    this.loadVelocityObstacles();
+
+    this.missionWrapper.innerHTML = "";
+
+    for (let i = 0; i < MAX_LIVES; ++i) {
+      let mission = document.createElement("img");
+      mission.setAttribute("id", "star-" + i);
+      mission.setAttribute("class", "mission");
+      mission.setAttribute("src", this.missionImageEmpty);
+      this.missionWrapper.appendChild(mission);
     }
 
-    this.livesText.textContent = 3;
+    this.livesText.textContent = MAX_LIVES;
   }
 
   restart() {
@@ -105,7 +117,6 @@ class Game {
     if (this.toxics.length > 0) this.toxics.forEach(toxic => toxic.draw());
 
     this.updatePlayer();
-
     this.obstacles.forEach(obstacle => obstacle.move());
   }
 
@@ -117,6 +128,14 @@ class Game {
   }
 
   /****** OBSTACLES ******/
+  loadVelocityObstacles() {
+    let loadVelocity = function(elem) {
+      elem.vx = VELOCITY;
+    };
+
+    this.obstacles_data.map(obs => loadVelocity(obs));
+  }
+
   generateObstacles() {
     this.obstacles.push(
       new Obstacle(this.ctx, this.width, this.height, this.keysDirection)
@@ -132,9 +151,8 @@ class Game {
   }
 
   invertObstacles() {
-    debugger;
     let invert = function(elem) {
-      elem.direction = elem.direction === "left" ? "right" : "left";
+      elem.direction = elem.direction === 1 ? 0 : 1;
     };
 
     this.obstacles.map(obs => invert(obs));
@@ -163,13 +181,13 @@ class Game {
     this.level++;
     this.counterMission++;
 
-    //if (this.level > 1) this.accelerateObstacles();
+    if (this.level === MAX_LEVEL - 1) this.accelerateObstacles();
 
     this.player.remove();
     this.mission.remove();
     this.mission.drawWin();
 
-    this.counterMission >= 3
+    this.counterMission >= MAX_LEVEL
       ? (this.status = this.statusKey.WINNER)
       : this.restart();
   }
@@ -259,6 +277,7 @@ class Game {
 
     /* Mission */
     this.missionContainer = document.getElementById("mission-container");
+    this.missionWrapper = document.getElementById("mission-wrapper");
     this.missionImage = "./res/img/star.svg";
     this.missionImageEmpty = "./res/img/star-empty.svg";
     this.missionContainer.style.visibility = "visible";

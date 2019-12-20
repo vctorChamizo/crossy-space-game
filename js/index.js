@@ -29,9 +29,8 @@ window.onload = () => {
     game.clear();
     game.update();
 
-    if (framesCounter % 25 === 0)
-      //game.generateObstacles();
-      game.clearObstacles();
+    if (framesCounter % 25 === 0) game.generateObstacles();
+    game.clearObstacles();
 
     if (game.collisionObstacle() || game.updateTime()) {
       audios.play(keyAudios.OBSTACLE);
