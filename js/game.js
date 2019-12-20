@@ -210,9 +210,10 @@ class Game {
   collisionToxic() {
     return this.toxics.some(
       toxic =>
+        this.player.posX + this.player.width > toxic.posX &&
         this.player.posX < toxic.posX + toxic.width &&
-        this.player.posX + this.player.width >= toxic.posX &&
-        this.player.posY <= toxic.posY
+        this.player.posY + this.player.height > toxic.posY &&
+        this.player.posY < toxic.posY + toxic.height
     );
   }
 
@@ -220,9 +221,10 @@ class Game {
     this.toxics = this.toxics.filter(
       toxic =>
         !(
+          this.player.posX + this.player.width > toxic.posX &&
           this.player.posX < toxic.posX + toxic.width &&
-          this.player.posX + this.player.width >= toxic.posX &&
-          this.player.posY <= toxic.posY
+          this.player.posY + this.player.height > toxic.posY &&
+          this.player.posY < toxic.posY + toxic.height
         )
     );
   }
