@@ -78,7 +78,7 @@ class Game {
     this.counterLives = MAX_LIVES;
     this.counterMission = 0;
     this.status = undefined;
-    this.obstacles = [];
+    this.obstacles = this.preLoadObstacles();
     this.toxics = [];
     this.level = 0;
 
@@ -128,6 +128,25 @@ class Game {
   }
 
   /****** OBSTACLES ******/
+  preLoadObstacles() {
+    let obstacles = [];
+    preload_obstacle.forEach(e => {
+      e.forEach(posX => {
+        let obstacle = new Obstacle(
+          this.ctx,
+          this.width,
+          this.height,
+          this.keysDirection
+        );
+        obstacle.posX = posX;
+        obstacle.vx = VELOCITY;
+        obstacles.push(obstacle);
+      });
+    });
+
+    return obstacles;
+  }
+
   loadVelocityObstacles() {
     let loadVelocity = function(elem) {
       elem.vx = VELOCITY;

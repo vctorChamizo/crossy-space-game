@@ -29,6 +29,7 @@ window.onload = () => {
     game.clear();
     game.update();
 
+    if (game.level > 1 && framesCounter % 12 === 0) game.generateObstacles();
     if (framesCounter % 25 === 0) game.generateObstacles();
     game.clearObstacles();
 
