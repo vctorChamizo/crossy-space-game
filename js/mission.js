@@ -37,4 +37,12 @@ class Mission {
   remove() {
     this.ctx.clearRect(this.posX, this.posY, this.width, this.height);
   }
+
+  isCollision(player) {
+    return (
+      player.posX < this.posX + this.width / 2 &&
+      player.posX + this.width / 2 >= this.posX &&
+      player.posY <= this.posY
+    );
+  }
 }

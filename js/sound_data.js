@@ -1,4 +1,4 @@
-let sound_data = [
+let audio_data = [
   {
     name: "Battleship",
     src: "./res/audio/Battleship.ogg"

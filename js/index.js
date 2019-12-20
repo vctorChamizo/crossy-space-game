@@ -4,7 +4,7 @@ window.onload = () => {
   let requestID;
   let pause = false;
 
-  let keySounds = {
+  let keyAudios = {
     BATTLESHIP: 0,
     OBSTACLE: 1,
     MISSION: 2,
@@ -13,7 +13,7 @@ window.onload = () => {
     LOSER: 5
   };
 
-  let sounds = new Sound(keySounds);
+  let audios = new Audio(keyAudios);
 
   let startGameBtn = document.getElementById("start-game-btn");
   let spaceShipImageOption = document.getElementById("space-ship-img");
@@ -32,40 +32,37 @@ window.onload = () => {
     game.clearObstacles();
 
     if (game.collisionObstacle() || game.updateTime()) {
-      sounds.play(keySounds.OBSTACLE);
+      audios.play(keyAudios.OBSTACLE);
       game.playerLoseLive();
       pause = true;
     }
     if (game.collisionMission()) {
-      sounds.play(keySounds.MISSION);
+      audios.play(keyAudios.MISSION);
       game.winMission();
       pause = true;
     }
     if (game.level > 0 && game.collisionToxic()) {
-      sounds.play(keySounds.TOXIC);
+      audios.play(keyAudios.TOXIC);
       game.removeToxicItem();
-      game.invertObstaclesParameters();
-      game.invertObstaclesOnBoard();
+      game.invertObstacles();
     }
 
     if (game.gameStatus() !== null) {
-      sounds.stop(keySounds.BATTLESHIP);
+      audios.stop(keyAudios.BATTLESHIP);
       window.cancelAnimationFrame(requestID);
-      debugger;
       !game.gameStatus()
-        ? sounds.play(keySounds.WINNER)
-        : sounds.play(keySounds.LOSER);
-    } else if (!pause) window.requestAnimationFrame(step);
-    else {
+        ? audios.play(keyAudios.WINNER)
+        : audios.play(keyAudios.LOSER);
+    } else if (pause) {
       setTimeout(() => {
         window.requestAnimationFrame(step);
         pause = false;
       }, 300);
-    }
+    } else window.requestAnimationFrame(step);
   }
 
   startGameBtn.onclick = () => {
-    sounds.play(keySounds.BATTLESHIP);
+    audios.play(keyAudios.BATTLESHIP);
     game.start(spaceShips[index].src);
     requestID = window.requestAnimationFrame(step);
   };

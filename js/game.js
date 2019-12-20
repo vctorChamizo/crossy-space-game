@@ -46,21 +46,17 @@ class Game {
     this.obstacles_data = obstacles_data;
     this.obstacle;
     this.obstacles;
+    this.keysDirection = {
+      RIGHT: "right",
+      LEFT: "left"
+    };
 
     /*Levels*/
     this.level = 0;
     this.toxics;
-
-    /*Sounds*/
-    this.sounds;
-    this.keySounds = {
-      BATTLESHIP: 0,
-      OBSTACLE: 1,
-      MISSION: 2,
-      TOXIC: 3
-    };
   }
 
+  /****** GLOBAL ******/
   start(spaceShipImg) {
     this.spaceShipImg = spaceShipImg;
 
@@ -81,8 +77,9 @@ class Game {
     this.toxics = [];
 
     for (let i = 0; i < 3; ++i) {
-      let starElement = document.getElementById("star-" + i);
-      if (starElement) starElement.setAttribute("src", this.missionImageEmpty);
+      document
+        .getElementById("star-" + i)
+        .setAttribute("src", this.missionImageEmpty);
     }
 
     this.livesText.textContent = 3;
@@ -95,7 +92,7 @@ class Game {
     this.setPlayerOnBoard();
     this.setMissionOnBoard();
 
-    if (this.level > 0 && this.toxics.length <= 1) this.setToxicItem();
+    if (this.level > 0) this.setToxicItem();
   }
 
   clear() {
@@ -108,6 +105,7 @@ class Game {
     if (this.toxics.length > 0) this.toxics.forEach(toxic => toxic.draw());
 
     this.updatePlayer();
+
     this.obstacles.forEach(obstacle => obstacle.move());
   }
 
@@ -120,75 +118,54 @@ class Game {
 
   /****** OBSTACLES ******/
   generateObstacles() {
-    this.obstacles.push(new Obstacle(this.ctx, this.width, this.height));
+    this.obstacles.push(
+      new Obstacle(this.ctx, this.width, this.height, this.keysDirection)
+    );
   }
 
   collisionObstacle() {
-    return this.obstacles.some(
-      obs =>
-        this.player.posX + this.player.width > obs.posX &&
-        this.player.posX < obs.posX + obs.width &&
-        this.player.posY + this.player.height > obs.posY &&
-        this.player.posY < obs.posY + obs.height
-    );
+    return this.obstacles.some(obs => obs.isCollision(this.player));
   }
 
   clearObstacles() {
-    this.obstacles = this.obstacles.filter(
-      obstacle =>
-        obstacle.posX >= -obstacle.width && obstacle.posX <= this.width
-    );
+    this.obstacles = this.obstacles.filter(obs => obs.isOutOfRange());
   }
 
-  invertObstaclesParameters() {
-    this.obstacles_data.map(obs => {
-      obs.direction = obs.direction === "left" ? "right" : "left";
-    });
-  }
+  invertObstacles() {
+    let invert = function(elem) {
+      elem.direction =
+        elem.direction === this.keysDirection.LEFT
+          ? this.keysDirection.RIGHT
+          : this.keysDirection.LEFT;
+    };
 
-  invertObstaclesOnBoard() {
-    this.obstacles.map(obs => {
-      obs.direction = obs.direction === "left" ? "right" : "left";
-    });
+    this.obstacles.map(obs => invert(obs));
+    this.obstacles_data.map(obs => invert(obs));
   }
 
   accelerateObstacles() {
-    this.accelerateObstaclesParameters();
-    this.accelerateObstaclesOnBoard();
-  }
+    let acclerate = function(elem) {
+      elem.vx *= 2;
+    };
 
-  accelerateObstaclesParameters() {
-    this.obstacles_data.map(obs => {
-      obs.vx *= 2;
-    });
+    this.obstacles_data.map(obs => acclerate(obs));
+    this.obstacles.map(obs => acclerate(obs));
   }
-
-  accelerateObstaclesOnBoard() {
-    this.obstacles.map(obs => {
-      obs.vx *= 2;
-    });
-  }
-  /************************/
 
   /****** MISSION ******/
   collisionMission() {
-    return (
-      this.player.posX < this.mission.posX + this.mission.width / 2 &&
-      this.player.posX + this.player.width / 2 >= this.mission.posX &&
-      this.player.posY <= this.mission.posY
-    );
+    this.mission.isCollision(this.player);
   }
 
   winMission() {
     this.level++;
+    this.counterMission++;
+
     //if (this.level > 1) this.accelerateObstacles();
 
-    let starElement = document.getElementById("star-" + this.counterMission);
-
-    if (starElement) {
-      starElement.setAttribute("src", this.missionImage);
-      this.counterMission++;
-    }
+    document
+      .getElementById("star-" + this.counterMission)
+      .setAttribute("src", this.missionImage);
 
     this.player.remove();
     this.mission.remove();
@@ -198,7 +175,6 @@ class Game {
       ? (this.status = this.statusKey.WINNER)
       : this.restart();
   }
-  /************************/
 
   /****** LEVELS ******/
   setToxicItem() {
@@ -208,27 +184,12 @@ class Game {
   }
 
   collisionToxic() {
-    return this.toxics.some(
-      toxic =>
-        this.player.posX + this.player.width > toxic.posX &&
-        this.player.posX < toxic.posX + toxic.width &&
-        this.player.posY + this.player.height > toxic.posY &&
-        this.player.posY < toxic.posY + toxic.height
-    );
+    return this.toxics.some(toxic => toxic.isCollision(this.player));
   }
 
   removeToxicItem() {
-    this.toxics = this.toxics.filter(
-      toxic =>
-        !(
-          this.player.posX + this.player.width > toxic.posX &&
-          this.player.posX < toxic.posX + toxic.width &&
-          this.player.posY + this.player.height > toxic.posY &&
-          this.player.posY < toxic.posY + toxic.height
-        )
-    );
+    this.toxics = this.toxics.filter(toxic => !toxic.isCollision(this.player));
   }
-  /************************/
 
   /****** INFO PLAYER ITEMS ******/
   updateTime() {
@@ -249,7 +210,6 @@ class Game {
       ? (this.status = this.statusKey.LOSER)
       : this.restart();
   }
-  /************************/
 
   /****** STATUS GAME ******/
   gameStatus() {
@@ -272,9 +232,8 @@ class Game {
 
     return this.status;
   }
-  /************************/
 
-  /****** Load elements on Board ******/
+  /****** LOAD ELEMENTS ON BOARD ******/
   loadElements() {
     /* Game Board */
     this.canvas = document.getElementById("game-board");
@@ -302,8 +261,8 @@ class Game {
 
     /* Mission */
     this.missionContainer = document.getElementById("mission-container");
-    this.missionImage = "/res/img/star.svg";
-    this.missionImageEmpty = "/res/img/star-empty.svg";
+    this.missionImage = "./res/img/star.svg";
+    this.missionImageEmpty = "./res/img/star-empty.svg";
     this.missionContainer.style.visibility = "visible";
   }
 
@@ -326,8 +285,7 @@ class Game {
       this.height,
       25,
       25,
-      "/res/img/star.svg"
+      "./res/img/star.svg"
     );
   }
-  /************************/
 }
