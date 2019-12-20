@@ -10,7 +10,8 @@ window.onload = () => {
     MISSION: 2,
     TOXIC: 3,
     WINNER: 4,
-    LOSER: 5
+    LOSER: 5,
+    SPACE: 6
   };
 
   let audios = new Audio(keyAudios);
@@ -28,8 +29,9 @@ window.onload = () => {
     game.clear();
     game.update();
 
-    if (framesCounter % 25 === 0) game.generateObstacles();
-    game.clearObstacles();
+    if (framesCounter % 25 === 0)
+      //game.generateObstacles();
+      game.clearObstacles();
 
     if (game.collisionObstacle() || game.updateTime()) {
       audios.play(keyAudios.OBSTACLE);
@@ -68,11 +70,13 @@ window.onload = () => {
   };
 
   arrowLeftOption.onclick = () => {
+    audios.play(keyAudios.SPACE);
     index = index == 0 ? spaceShips.length - 1 : --index;
     spaceShipImageOption.setAttribute("src", spaceShips[index].src);
   };
 
   arrowRightOption.onclick = () => {
+    audios.play(keyAudios.SPACE);
     index = index == spaceShips.length - 1 ? 0 : ++index;
     spaceShipImageOption.setAttribute("src", spaceShips[index].src);
   };

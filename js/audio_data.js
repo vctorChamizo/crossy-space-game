@@ -22,5 +22,9 @@ let audio_data = [
   {
     name: "Loser",
     src: "./res/audio/game-over.mp3"
+  },
+  {
+    name: "Space",
+    src: "./res/audio/space.mp3"
   }
 ];

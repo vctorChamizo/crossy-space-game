@@ -132,11 +132,9 @@ class Game {
   }
 
   invertObstacles() {
+    debugger;
     let invert = function(elem) {
-      elem.direction =
-        elem.direction === this.keysDirection.LEFT
-          ? this.keysDirection.RIGHT
-          : this.keysDirection.LEFT;
+      elem.direction = elem.direction === "left" ? "right" : "left";
     };
 
     this.obstacles.map(obs => invert(obs));
@@ -144,28 +142,28 @@ class Game {
   }
 
   accelerateObstacles() {
-    let acclerate = function(elem) {
+    let accelerate = function(elem) {
       elem.vx *= 2;
     };
 
-    this.obstacles_data.map(obs => acclerate(obs));
-    this.obstacles.map(obs => acclerate(obs));
+    this.obstacles_data.map(obs => accelerate(obs));
+    this.obstacles.map(obs => accelerate(obs));
   }
 
   /****** MISSION ******/
   collisionMission() {
-    this.mission.isCollision(this.player);
+    return this.mission.isCollision(this.player);
   }
 
   winMission() {
+    document
+      .getElementById("star-" + this.counterMission)
+      .setAttribute("src", this.missionImage);
+
     this.level++;
     this.counterMission++;
 
     //if (this.level > 1) this.accelerateObstacles();
-
-    document
-      .getElementById("star-" + this.counterMission)
-      .setAttribute("src", this.missionImage);
 
     this.player.remove();
     this.mission.remove();

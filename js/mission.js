@@ -40,8 +40,8 @@ class Mission {
 
   isCollision(player) {
     return (
-      player.posX < this.posX + this.width / 2 &&
-      player.posX + this.width / 2 >= this.posX &&
+      player.posX < this.posX + this.width &&
+      player.posX + this.width >= this.posX &&
       player.posY <= this.posY
     );
   }

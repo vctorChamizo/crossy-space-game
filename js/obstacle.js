@@ -20,7 +20,8 @@ class Obstacle {
 
     this.vx = this.obstacle.vx;
 
-    if (this.obstacle.direction === this.keysDirection.LEFT) this.posX = this.gameWidth;
+    if (this.obstacle.direction === this.keysDirection.LEFT)
+      this.posX = this.gameWidth;
 
     this.image = new Image();
     this.image.src = this.obstacle.image;

@@ -29,7 +29,7 @@ class Toxic {
     );
   }
 
-  isCollosion(player) {
+  isCollision(player) {
     return (
       player.posX + player.width > this.posX &&
       player.posX < this.posX + this.width &&
