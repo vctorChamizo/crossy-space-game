@@ -1,3 +1,7 @@
+const MAX_LEVEL = 3;
+const MAX_LIVES = 3;
+const VELOCITY = 2.5;
+
 class Game {
   constructor() {
     /* Game Board */
@@ -18,8 +22,8 @@ class Game {
     this.spaceShipImg;
     this.status;
     this.statusKey = {
-      WINNER: "Winner",
-      LOSER: "Loser"
+      WINNER: 0,
+      LOSER: 1
     };
     this.keys = {
       UP: 38,
@@ -38,6 +42,7 @@ class Game {
     /* Mission */
     this.mission;
     this.missionContainer;
+    this.missionWrapper;
     this.missionImage;
     this.counterMission;
     this.missionImageEmpty;
@@ -46,12 +51,17 @@ class Game {
     this.obstacles_data = obstacles_data;
     this.obstacle;
     this.obstacles;
+    this.keysDirection = {
+      RIGHT: 0,
+      LEFT: 1
+    };
 
     /*Levels*/
-    this.level = 0;
+    this.level;
     this.toxics;
   }
 
+  /****** GLOBAL ******/
   start(spaceShipImg) {
     this.spaceShipImg = spaceShipImg;
 
@@ -65,18 +75,26 @@ class Game {
 
   init() {
     this.time = 100;
-    this.counterLives = 3;
+    this.counterLives = MAX_LIVES;
     this.counterMission = 0;
     this.status = undefined;
-    this.obstacles = [];
+    this.obstacles = this.preLoadObstacles();
     this.toxics = [];
+    this.level = 0;
 
-    for (let i = 0; i < 3; ++i) {
-      let starElement = document.getElementById("star-" + i);
-      if (starElement) starElement.setAttribute("src", this.missionImageEmpty);
+    this.loadVelocityObstacles();
+
+    this.missionWrapper.innerHTML = "";
+
+    for (let i = 0; i < MAX_LIVES; ++i) {
+      let mission = document.createElement("img");
+      mission.setAttribute("id", "star-" + i);
+      mission.setAttribute("class", "mission");
+      mission.setAttribute("src", this.missionImageEmpty);
+      this.missionWrapper.appendChild(mission);
     }
 
-    this.livesText.textContent = 3;
+    this.livesText.textContent = MAX_LIVES;
   }
 
   restart() {
@@ -86,7 +104,7 @@ class Game {
     this.setPlayerOnBoard();
     this.setMissionOnBoard();
 
-    this.checkLevel();
+    if (this.level > 0) this.setToxicItem();
   }
 
   clear() {
@@ -94,8 +112,6 @@ class Game {
   }
 
   update() {
-    this.updateTime();
-
     this.mission.draw();
     this.obstacles.forEach(obstacle => obstacle.draw());
     if (this.toxics.length > 0) this.toxics.forEach(toxic => toxic.draw());
@@ -112,116 +128,123 @@ class Game {
   }
 
   /****** OBSTACLES ******/
+  preLoadObstacles() {
+    let obstacles = [];
+    preload_obstacle.forEach(e => {
+      e.forEach(posX => {
+        let obstacle = new Obstacle(
+          this.ctx,
+          this.width,
+          this.height,
+          this.keysDirection
+        );
+        obstacle.posX = posX;
+        obstacle.vx = VELOCITY;
+        obstacles.push(obstacle);
+      });
+    });
+
+    return obstacles;
+  }
+
+  loadVelocityObstacles() {
+    let loadVelocity = function(elem) {
+      elem.vx = VELOCITY;
+    };
+
+    this.obstacles_data.map(obs => loadVelocity(obs));
+  }
+
   generateObstacles() {
-    this.obstacles.push(new Obstacle(this.ctx, this.width, this.height));
+    this.obstacles.push(
+      new Obstacle(this.ctx, this.width, this.height, this.keysDirection)
+    );
   }
 
   collisionObstacle() {
-    return this.obstacles.some(
-      obs =>
-        this.player.posX + this.player.width > obs.posX &&
-        this.player.posX < obs.posX + obs.width &&
-        this.player.posY + this.player.height > obs.posY &&
-        this.player.posY < obs.posY + obs.height
-    );
+    return this.obstacles.some(obs => obs.isCollision(this.player));
   }
 
   clearObstacles() {
-    this.obstacles = this.obstacles.filter(
-      obstacle =>
-        obstacle.posX >= -obstacle.width && obstacle.posX <= this.width
-    );
+    this.obstacles = this.obstacles.filter(obs => obs.isOutOfRange());
   }
 
-  invertObstaclesParameters() {
-    this.obstacles_data.map(obs => {
-      obs.direction = obs.direction === "left" ? "right" : "left";
-    });
+  invertObstacles() {
+    let invert = function(elem) {
+      elem.direction = elem.direction === 1 ? 0 : 1;
+    };
+
+    this.obstacles.map(obs => invert(obs));
+    this.obstacles_data.map(obs => invert(obs));
   }
 
-  invertObstaclesOnBoard() {
-    this.obstacles.map(obs => {
-      obs.vx = -obs.vx;
-    });
+  accelerateObstacles() {
+    let accelerate = function(elem) {
+      elem.vx *= 2;
+    };
+
+    this.obstacles_data.map(obs => accelerate(obs));
+    this.obstacles.map(obs => accelerate(obs));
   }
-  /************************/
 
   /****** MISSION ******/
   collisionMission() {
-    return (
-      this.player.posX < this.mission.posX + this.mission.width / 2 &&
-      this.player.posX + this.player.width / 2 >= this.mission.posX &&
-      this.player.posY <= this.mission.posY
-    );
+    return this.mission.isCollision(this.player);
   }
 
   winMission() {
-    let starElement = document.getElementById("star-" + this.counterMission);
+    document
+      .getElementById("star-" + this.counterMission)
+      .setAttribute("src", this.missionImage);
 
-    if (starElement) {
-      starElement.setAttribute("src", this.missionImage);
-      this.counterMission++;
-      this.level++;
-    }
+    this.level++;
+    this.counterMission++;
 
-    this.counterMission >= 3
+    if (this.level === MAX_LEVEL - 1) this.accelerateObstacles();
+
+    this.player.remove();
+    this.mission.remove();
+    this.mission.drawWin();
+
+    this.counterMission >= MAX_LEVEL
       ? (this.status = this.statusKey.WINNER)
       : this.restart();
   }
-  /************************/
 
   /****** LEVELS ******/
-  checkLevel() {
-    if (this.level > 0) this.setToxicItem();
-    if (this.level > 1) undefined;
-  }
-
   setToxicItem() {
     this.toxics.push(
-      new Toxic(this.ctx, this.width, this.height, "/res/img/poison.svg")
+      new Toxic(this.ctx, this.width, this.height, "./res/img/poison.svg")
     );
   }
 
   collisionToxic() {
-    return this.toxics.length === 0
-      ? false
-      : this.toxics.some(
-          toxic =>
-            this.player.posX < toxic.posX + toxic.width &&
-            this.player.posX + this.player.width >= toxic.posX &&
-            this.player.posY <= toxic.posY
-        );
+    return this.toxics.some(toxic => toxic.isCollision(this.player));
   }
 
   removeToxicItem() {
-    this.toxics = this.toxics.filter(
-      toxic =>
-        !(
-          this.player.posX < toxic.posX + toxic.width &&
-          this.player.posX + this.player.width >= toxic.posX &&
-          this.player.posY <= toxic.posY
-        )
-    );
+    this.toxics = this.toxics.filter(toxic => !toxic.isCollision(this.player));
   }
-  /************************/
 
   /****** INFO PLAYER ITEMS ******/
   updateTime() {
     this.time -= 0.1;
     this.progressBar.style.height = this.time + "%";
 
-    if (this.time <= 0 && this.counterLives > 0) this.playerLoseLive();
+    return this.time <= 0 && this.counterLives > 0;
   }
 
   playerLoseLive() {
     this.counterLives--;
     this.livesText.textContent--;
 
+    this.player.remove();
+    this.player.drawDeath();
+
     this.counterLives === 0
       ? (this.status = this.statusKey.LOSER)
       : this.restart();
   }
-  /************************/
 
   /****** STATUS GAME ******/
   gameStatus() {
@@ -241,10 +264,11 @@ class Game {
     this.status === this.statusKey.WINNER
       ? (this.statusTitleOption.textContent = "¡WINNER!")
       : (this.statusTitleOption.textContent = "GAME OVER");
-  }
-  /************************/
 
-  /****** Load elements on Board ******/
+    return this.status;
+  }
+
+  /****** LOAD ELEMENTS ON BOARD ******/
   loadElements() {
     /* Game Board */
     this.canvas = document.getElementById("game-board");
@@ -272,8 +296,9 @@ class Game {
 
     /* Mission */
     this.missionContainer = document.getElementById("mission-container");
-    this.missionImage = "/res/img/star.svg";
-    this.missionImageEmpty = "/res/img/star-empty.svg";
+    this.missionWrapper = document.getElementById("mission-wrapper");
+    this.missionImage = "./res/img/star.svg";
+    this.missionImageEmpty = "./res/img/star-empty.svg";
     this.missionContainer.style.visibility = "visible";
   }
 
@@ -282,6 +307,8 @@ class Game {
       this.ctx,
       this.width,
       this.height,
+      65,
+      65,
       this.spaceShipImg,
       this.keys
     );
@@ -292,8 +319,9 @@ class Game {
       this.ctx,
       this.width,
       this.height,
-      "/res/img/star.svg"
+      25,
+      25,
+      "./res/img/star.svg"
     );
   }
-  /************************/
 }
