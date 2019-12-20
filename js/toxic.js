@@ -28,4 +28,13 @@ class Toxic {
       this.height
     );
   }
+
+  isCollision(player) {
+    return (
+      player.posX + player.width > this.posX &&
+      player.posX < this.posX + this.width &&
+      player.posY + player.height > this.posY &&
+      player.posY < this.posY + this.height
+    );
+  }
 }
