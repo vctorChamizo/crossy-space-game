@@ -1,6 +1,8 @@
 # Crossy Space | Game
 Crossy Space is the first project of IronHack bootcamp Web Developmet that consists in a game based on retro game [Frogger](https://en.wikipedia.org/wiki/Frogger) developed with web technologies.
 
+[Crossy Space Game](https://vctorchamizo.github.io/crossy-space-game/)
+
 ## Introduction
 The player plays a battle spaceship that wants to cross the space to get the star. Along the way you will find various obstacles that you must avoid in order not to lose your lives.
 
@@ -54,9 +56,6 @@ The spaceship moves as follows:
 - ↓ : move backward.
 - ← : move left.
 - → : move right.
-
-## Game
-[Crossy Space Game](https://vctorchamizo.github.io/crossy-space-game/)
 
 ## Author
 
