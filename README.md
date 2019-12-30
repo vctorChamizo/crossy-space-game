@@ -9,7 +9,7 @@ The player plays a battle spaceship that wants to cross the space to get the sta
 The game consists of several levels of difficulty and the battle sapce ship will lose their lives if one of the obstacles hits it or if it does not get the star in the safe area of the sapce before the countdown ends.
 
 ## Documentation
-The features and the workflow of the project are in my [Notion workspace.](https://www.notion.so/ironhackvictor/Game-Project-fd45b2baa13847a597594ba1b583cb71)
+The features and the workflow of the project are in my [Notion](https://www.notion.so/ironhackvictor/Game-Project-fd45b2baa13847a597594ba1b583cb71) workspace.
 
 ## Project Content
 ```
