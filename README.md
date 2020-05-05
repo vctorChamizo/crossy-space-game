@@ -10,8 +10,7 @@ The player plays a battle spaceship that wants to cross the space to get the sta
 
 The game consists of several levels of difficulty and the battle sapce ship will lose their lives if one of the obstacles hits it or if it does not get the star in the safe area of the sapce before the countdown ends.
 
-![game-crossy_space](https://user-images.githubusercontent.com/32466953/81075899-3f60f900-8eeb-11ea-8fed-2f292116a505.png)
-
+![game-crossy_space](https://user-images.githubusercontent.com/32466953/81077978-ee9ecf80-8eed-11ea-8204-327d3ff1f5c3.png)
 
 ## Setup
 When starting the game we must choose the type of spaceship with which we want to play.
@@ -26,9 +25,9 @@ The spaceship moves as follows:
 
 ## Resources
 - [Space Ship Player](https://gisha.itch.io/spaceships-asset-pack)
-- [Space Age Font]()
-- [Background Space]()
-- [Animated Progress Bar]()
+- [Space Age Font](https://www.dafont.com/es/space-age.font)
+- [Background Space](https://codepen.io/eloisemonteiro/pen/BJYWQq)
+- [Animated Progress Bar](https://codepen.io/Thibaut/pen/ouKvy)
 
 ## Technologies
 - [HTML](https://developer.mozilla.org/en/docs/Web/HTML) [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS): used for project web layout.
